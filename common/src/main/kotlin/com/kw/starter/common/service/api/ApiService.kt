@@ -21,7 +21,9 @@ import org.springframework.web.util.UriComponents
 import java.lang.reflect.Type
 import java.net.SocketTimeoutException
 
-open class ApiService(private val restTemplate: RestTemplate) {
+open class ApiService(
+    private val restTemplate: RestTemplate,
+) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     fun <T> execute(
@@ -116,14 +118,13 @@ open class ApiService(private val restTemplate: RestTemplate) {
             val appResponse: T =
                 mapper.readValue(
                     httpException.responseBodyAsString,
-                    object : TypeReference<T> () {
-                        override fun getType(): Type {
-                            return responseType
-                        }
+                    object : TypeReference<T>() {
+                        override fun getType(): Type = responseType
                     },
                 )
 
-            ResponseEntity.status(httpException.rawStatusCode)
+            ResponseEntity
+                .status(httpException.statusCode)
                 .headers(httpException.responseHeaders)
                 .body(appResponse)
         } catch (ex: Exception) {

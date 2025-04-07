@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component
 import org.springframework.web.servlet.HandlerInterceptor
 
 @Component
-class LogInterceptor(private val httpLoggingService: HttpLoggingService) : HandlerInterceptor {
+class LogInterceptor(
+    private val httpLoggingService: HttpLoggingService,
+) : HandlerInterceptor {
     companion object {
         val exclusionPaths =
             listOf(

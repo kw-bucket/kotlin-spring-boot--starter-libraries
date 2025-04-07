@@ -12,9 +12,7 @@ class MaskingPatternLayout : PatternLayout() {
         maskPatterns.add(maskPattern)
     }
 
-    override fun doLayout(event: ILoggingEvent?): String {
-        return maskMessage(super.doLayout(event))
-    }
+    override fun doLayout(event: ILoggingEvent?): String = maskMessage(super.doLayout(event))
 
     private fun maskMessage(message: String): String {
         if (maskPatterns.isEmpty()) return message

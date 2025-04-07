@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice
 
 @ControllerAdvice
-class ResponseBodyInterceptor(private val httpLoggingService: HttpLoggingService) : ResponseBodyAdvice<Any> {
+class ResponseBodyInterceptor(
+    private val httpLoggingService: HttpLoggingService,
+) : ResponseBodyAdvice<Any> {
     override fun supports(
         returnType: MethodParameter,
         converterType: Class<out HttpMessageConverter<*>>,
-    ): Boolean {
-        return true
-    }
+    ): Boolean = true
 
     override fun beforeBodyWrite(
         body: Any?,

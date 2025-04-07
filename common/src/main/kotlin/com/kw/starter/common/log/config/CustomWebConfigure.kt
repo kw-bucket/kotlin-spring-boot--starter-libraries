@@ -6,7 +6,9 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 @Component
-class CustomWebConfigure(private val logInterceptor: LogInterceptor) : WebMvcConfigurer {
+class CustomWebConfigure(
+    private val logInterceptor: LogInterceptor,
+) : WebMvcConfigurer {
     override fun addInterceptors(registry: InterceptorRegistry) {
         registry.addInterceptor(logInterceptor).excludePathPatterns(LogInterceptor.exclusionPaths)
     }

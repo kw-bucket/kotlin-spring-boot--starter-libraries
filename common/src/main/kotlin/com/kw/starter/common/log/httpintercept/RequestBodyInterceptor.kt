@@ -34,7 +34,5 @@ class RequestBodyInterceptor(
         methodParameter: MethodParameter,
         targetType: Type,
         converterType: Class<out HttpMessageConverter<*>>,
-    ): Boolean {
-        return true
-    }
+    ): Boolean = true
 }

@@ -20,18 +20,22 @@ class HttpLoggingService {
         requestBody: Any?,
     ) {
         val parameters =
-            httpRequest.parameterNames.toList().associateWith {
-                httpRequest.getParameter(it)
-            }.let {
-                prettyPrinter.writeValueAsString(it)
-            } ?: "None"
+            httpRequest.parameterNames
+                .toList()
+                .associateWith {
+                    httpRequest.getParameter(it)
+                }.let {
+                    prettyPrinter.writeValueAsString(it)
+                } ?: "None"
 
         val headers =
-            httpRequest.headerNames.toList().associateWith {
-                httpRequest.getHeader(it)
-            }.let {
-                prettyPrinter.writeValueAsString(it)
-            } ?: "None"
+            httpRequest.headerNames
+                .toList()
+                .associateWith {
+                    httpRequest.getHeader(it)
+                }.let {
+                    prettyPrinter.writeValueAsString(it)
+                } ?: "None"
 
         val body = mapper.writeValueAsString(requestBody) ?: "None"
 
@@ -58,11 +62,13 @@ class HttpLoggingService {
         responseBody: Any?,
     ) {
         val headers =
-            httpResponse.headerNames.toList().associateWith {
-                httpResponse.getHeader(it)
-            }.let {
-                prettyPrinter.writeValueAsString(it)
-            } ?: "None"
+            httpResponse.headerNames
+                .toList()
+                .associateWith {
+                    httpResponse.getHeader(it)
+                }.let {
+                    prettyPrinter.writeValueAsString(it)
+                } ?: "None"
 
         val body = mapper.writeValueAsString(responseBody) ?: "None"
 

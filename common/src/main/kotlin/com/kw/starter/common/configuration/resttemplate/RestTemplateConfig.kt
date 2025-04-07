@@ -36,8 +36,7 @@ class RestTemplateConfig {
             .apply {
                 maxTotal = connectionLimit
                 defaultMaxPerRoute = maxConnectionPerRoute
-            }
-            .also {
+            }.also {
                 logger.debug(
                     """
                     Http Pooling Connection Config:
@@ -56,8 +55,7 @@ class RestTemplateConfig {
             .apply {
                 setConnectionRequestTimeout(connectionRequestTimeoutSec, TimeUnit.SECONDS)
                 setResponseTimeout(responseTimeoutSec, TimeUnit.SECONDS)
-            }
-            .build()
+            }.build()
             .also {
                 logger.debug(
                     """

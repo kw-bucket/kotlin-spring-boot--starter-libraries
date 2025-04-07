@@ -6,42 +6,49 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.1</version>
-        <relativePath/>
+        <groupId>com.kw</groupId>
+        <artifactId>kw-starter-parent</artifactId>
+        <version>1.x-SNAPSHOT</version>
+<!--		<relativePath/>-->
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.kw</groupId>
-    <artifactId>kotlin-spring-boot--starter-common-sftp</artifactId>
-    <version>3x-SNAPSHOT</version>
-    <name>common-sftp</name>
+    <artifactId>kw-starter-common-sftp</artifactId>
+    <version>1.x-SNAPSHOT</version>
+    <name>kw-starter-common-sftp</name>
     <description>Common library for SFTP</description>
 
     <properties>
-        <java.version>17</java.version>
-        <ktlint-maven-plugin.version>3.2.0</ktlint-maven-plugin.version>
+        <starter-common.version>1.x-SNAPSHOT</starter-common.version>
         <jsch.version>0.1.55</jsch.version>
-
-        <starter-common.version>3x-SNAPSHOT</starter-common.version>
     </properties>
 
     <dependencies>
-        <!-- COMMON LIBRARY -->
         <dependency>
             <groupId>com.kw</groupId>
-            <artifactId>kotlin-spring-boot--starter-common</artifactId>
-            <version>${starter-common.version}</version>
+            <artifactId>kw-starter-common</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- SSH -->
         <dependency>
             <groupId>com.jcraft</groupId>
             <artifactId>jsch</artifactId>
-            <version>${jsch.version}</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kw</groupId>
+                <artifactId>kw-starter-common</artifactId>
+                <version>${starter-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
@@ -91,22 +98,23 @@
         </pluginManagement>
     </build>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>maven-public</id>-->
-<!--            <url>...</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--
+    <repositories>
+        <repository>
+            <id>maven-public</id>
+            <url>http://nexus.my-org.com/nexus/content/groups/truemoney-group/</url>
+        </repository>
+    </repositories>
 
-<!--    <distributionManagement>-->
-<!--        <snapshotRepository>-->
-<!--            <id>nexus-snapshots</id>-->
-<!--            <url>.../snapshots/</url>-->
-<!--        </snapshotRepository>-->
-<!--        <repository>-->
-<!--            <id>nexus-releases</id>-->
-<!--            <url>.../releases/</url>-->
-<!--        </repository>-->
-<!--    </distributionManagement>-->
-
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://nexus.my-org.com/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://nexus.mh-org.com/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+    -->
 </project>

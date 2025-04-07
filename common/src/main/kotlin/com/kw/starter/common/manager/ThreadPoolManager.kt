@@ -25,8 +25,7 @@ object ThreadPoolManager {
 
                 setTaskDecorator(MdcTaskDecorator())
                 afterPropertiesSet()
-            }
-            .also {
+            }.also {
                 logger.trace(
                     """
                     Configure Thread Pool Executor:
@@ -59,8 +58,7 @@ object ThreadPoolManager {
 
                 setTaskDecorator(MdcTaskDecorator())
                 afterPropertiesSet()
-            }
-            .also {
+            }.also {
                 logger.trace(
                     """
                     Configure Fixed Thread Pool:

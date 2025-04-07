@@ -33,12 +33,14 @@ class HttpRequestFilter : OncePerRequestFilter() {
         val xCorrelationId = HeaderFields.X_CORRELATION_ID
 
         HeaderFields.TRACES.forEach { header ->
-            request.getHeader(header).let {
-                if (header == xCorrelationId && it.isNullOrBlank()) initCorrelationId() else it
-            }?.also {
-                requestHeaderWrapper.putHeader(header, it)
-                response.setHeader(header, requestHeaderWrapper.getHeader(header))
-            }
+            request
+                .getHeader(header)
+                .let {
+                    if (header == xCorrelationId && it.isNullOrBlank()) initCorrelationId() else it
+                }?.also {
+                    requestHeaderWrapper.putHeader(header, it)
+                    response.setHeader(header, requestHeaderWrapper.getHeader(header))
+                }
         }
 
         filterChain.doFilter(requestHeaderWrapper, response)
@@ -48,7 +50,9 @@ class HttpRequestFilter : OncePerRequestFilter() {
         val delimiter = "-"
 
         val randomId =
-            UUID.randomUUID().toString()
+            UUID
+                .randomUUID()
+                .toString()
                 .split(delimiter)
                 .takeLast(2)
                 .joinToString(separator = delimiter)

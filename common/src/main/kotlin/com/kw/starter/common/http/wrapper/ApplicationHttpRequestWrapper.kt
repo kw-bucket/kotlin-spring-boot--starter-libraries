@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpServletRequestWrapper
 import java.util.Collections
 import java.util.Enumeration
 
-class ApplicationHttpRequestWrapper(request: HttpServletRequest) : HttpServletRequestWrapper(request) {
+class ApplicationHttpRequestWrapper(
+    request: HttpServletRequest,
+) : HttpServletRequestWrapper(request) {
     private val customHeaders: MutableMap<String, String> = mutableMapOf()
 
     fun putHeader(

@@ -1,8 +1,8 @@
 # SPRING-BOOT KOTLIN COMMON LIBRARY
 
-This project serves specific artifacts to help reduce time creating new applications
+This project serves specific artifacts to help reduce time to initiating of new applications
 
-- [common](common/)
-- [common-mailable](common-mailable/)
+- [common-starter](common-starter/)
+- [common-mail](common-mail/)
 - [common-s3](common-s3/)
 - [common-sftp](common-sftp/)

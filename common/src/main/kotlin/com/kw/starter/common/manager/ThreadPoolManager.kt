@@ -1,6 +1,6 @@
 package com.kw.starter.common.manager
 
-import com.kw.starter.common.config.properties.ThreadPoolProperties
+import com.kw.starter.common.configuration.application.ThreadPoolConfig
 import com.kw.starter.common.decorator.MdcTaskDecorator
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -11,23 +11,21 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds
 
 object ThreadPoolManager {
-
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    fun initThreadPoolTaskExecutor(properties: ThreadPoolProperties): ThreadPoolTaskExecutor =
+    fun initThreadPoolTaskExecutor(config: ThreadPoolConfig): ThreadPoolTaskExecutor =
         ThreadPoolTaskExecutor()
             .apply {
-                setThreadNamePrefix(properties.threadNamePrefix)
-                setQueueCapacity(properties.capacity)
+                setThreadNamePrefix(config.threadNamePrefix)
 
-                keepAliveSeconds = properties.keepAliveTimeSec
-                corePoolSize = properties.pooling.core
-                maxPoolSize = properties.pooling.max
+                queueCapacity = config.capacity
+                keepAliveSeconds = config.keepAliveTimeSec
+                corePoolSize = config.pooling.core
+                maxPoolSize = config.pooling.max
 
                 setTaskDecorator(MdcTaskDecorator())
                 afterPropertiesSet()
-            }
-            .also {
+            }.also {
                 logger.trace(
                     """
                     Configure Thread Pool Executor:
@@ -37,9 +35,9 @@ object ThreadPoolManager {
                         - Max-Pool-Size[{}]
                     """.trimIndent(),
                     it.threadNamePrefix,
-                    properties.capacity,
+                    config.capacity,
                     it.corePoolSize,
-                    it.maxPoolSize
+                    it.maxPoolSize,
                 )
             }
 
@@ -52,16 +50,15 @@ object ThreadPoolManager {
         ThreadPoolTaskExecutor()
             .apply {
                 setThreadNamePrefix(threadNamePrefix)
-                setQueueCapacity(capacity)
 
+                queueCapacity = capacity
                 keepAliveSeconds = keepAliveTimeSec
                 corePoolSize = nThreads
                 maxPoolSize = nThreads
 
                 setTaskDecorator(MdcTaskDecorator())
                 afterPropertiesSet()
-            }
-            .also {
+            }.also {
                 logger.trace(
                     """
                     Configure Fixed Thread Pool:
@@ -69,7 +66,7 @@ object ThreadPoolManager {
                         - Max-Pool-Size[{}]
                     """.trimIndent(),
                     it.corePoolSize,
-                    it.maxPoolSize
+                    it.maxPoolSize,
                 )
             }
 

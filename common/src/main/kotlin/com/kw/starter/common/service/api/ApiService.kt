@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import org.apache.http.conn.ConnectTimeoutException
-import org.apache.http.conn.ConnectionPoolTimeoutException
+import org.apache.hc.client5.http.ConnectTimeoutException
+import org.apache.hc.core5.http.ConnectionRequestTimeoutException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.core.ParameterizedTypeReference
@@ -21,8 +21,9 @@ import org.springframework.web.util.UriComponents
 import java.lang.reflect.Type
 import java.net.SocketTimeoutException
 
-open class ApiService(private val restTemplate: RestTemplate) {
-
+open class ApiService(
+    private val restTemplate: RestTemplate,
+) {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     fun <T> execute(
@@ -30,19 +31,20 @@ open class ApiService(private val restTemplate: RestTemplate) {
         uriComponents: UriComponents,
         httpEntity: HttpEntity<Any>?,
         responseType: ParameterizedTypeReference<T>,
-    ): ApiOutcome<T> =
+    ): ApiResponse<T> =
         try {
             val response = call(httpMethod, uriComponents, httpEntity, responseType)
+            val httpStatus = HttpStatus.valueOf(response.statusCode.value())
 
             if (response.statusCode.is2xxSuccessful) {
-                ApiOutcome.Success(
-                    httpStatus = response.statusCode,
+                ApiResponse.Success(
+                    httpStatus = httpStatus,
                     httpHeaders = response.headers,
                     body = response.body,
                 )
             } else {
-                ApiOutcome.Failure(
-                    httpStatus = response.statusCode,
+                ApiResponse.Failure(
+                    httpStatus = httpStatus,
                     httpHeaders = response.headers,
                     body = response.body,
                 )
@@ -50,8 +52,8 @@ open class ApiService(private val restTemplate: RestTemplate) {
         } catch (ex: HttpStatusCodeException) {
             logger.error(ex.message)
 
-            ApiOutcome.Error(
-                httpStatus = ex.statusCode,
+            ApiResponse.Error(
+                httpStatus = HttpStatus.valueOf(ex.statusCode.value()),
                 httpHeaders = ex.responseHeaders,
                 bodyAsString = ex.responseBodyAsString,
                 cause = ex,
@@ -59,19 +61,24 @@ open class ApiService(private val restTemplate: RestTemplate) {
         } catch (ex: Exception) {
             logger.error(ex.message)
 
-            val (httpStatus, cause) = when (ex) {
-                is ResourceAccessException ->
-                    when (val cause: Throwable? = ex.cause) {
-                        is SocketTimeoutException -> Pair(HttpStatus.GATEWAY_TIMEOUT, cause)
-                        is ConnectionPoolTimeoutException,
-                        is ConnectTimeoutException -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, cause)
-                        else -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, ex)
-                    }
+            val (httpStatus, cause) =
+                when (ex) {
+                    is ResourceAccessException ->
+                        when (val cause: Throwable? = ex.cause) {
+                            is ConnectionRequestTimeoutException,
+                            is ConnectTimeoutException,
+                            -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, cause)
+                            is SocketTimeoutException -> Pair(HttpStatus.GATEWAY_TIMEOUT, cause)
+                            else -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, ex)
+                        }
 
-                else -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, ex)
-            }
+                    else -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, ex)
+                }
 
-            ApiOutcome.Error(httpStatus = httpStatus, cause = cause)
+            ApiResponse.Error(
+                httpStatus = httpStatus,
+                cause = cause,
+            )
         }
 
     @Throws(
@@ -103,18 +110,21 @@ open class ApiService(private val restTemplate: RestTemplate) {
         responseType: Type,
     ): ResponseEntity<T> =
         try {
-            val mapper = jacksonObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .registerModule(JavaTimeModule())
+            val mapper =
+                jacksonObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .registerModule(JavaTimeModule())
 
-            val appResponse: T = mapper.readValue(
-                httpException.responseBodyAsString,
-                object : TypeReference<T> () {
-                    override fun getType(): Type { return responseType }
-                }
-            )
+            val appResponse: T =
+                mapper.readValue(
+                    httpException.responseBodyAsString,
+                    object : TypeReference<T>() {
+                        override fun getType(): Type = responseType
+                    },
+                )
 
-            ResponseEntity.status(httpException.rawStatusCode)
+            ResponseEntity
+                .status(httpException.statusCode)
                 .headers(httpException.responseHeaders)
                 .body(appResponse)
         } catch (ex: Exception) {

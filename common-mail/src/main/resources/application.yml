@@ -1,0 +1,21 @@
+#config:
+#  email:
+#    mail-a:
+#      from: from@mail.com
+#      to: to_1@mail.com,to_2@mail.com
+#      cc: cc@mail.com
+#      bcc: bcc@mail.com
+#      subject: 'Mail Subject'
+#      body-template: 'body-template.html'
+#    mail-b:
+#      from: from@mail.com
+#      to: to_1@mail.com,to_2@mail.com
+#      cc: cc@mail.com
+#      bcc: bcc@mail.com
+#      subject: 'Mail Subject'
+#      body-template: 'body-template.html'
+#
+#api:
+#  mailing:
+#    endpoints:
+#      send-email: https://notification.service.io/api/v2/email

@@ -8,6 +8,7 @@ data class SftpRequest(
     val remotePath: Path,
 ) {
     enum class Command {
-        Upload, Download,
+        Upload,
+        Download,
     }
 }

@@ -18,17 +18,23 @@ import org.springframework.stereotype.Service
 
 @Service
 class S3UploadService(private val s3Client: AmazonS3) {
-
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
-    fun uploadFiles(requests: List<S3UploadRequest>, concurrent: Int = requests.size): List<S3UploadResult> {
+    fun uploadFiles(
+        requests: List<S3UploadRequest>,
+        concurrent: Int = requests.size,
+    ): List<S3UploadResult> {
         val semaphore = Semaphore(concurrent)
         val mdcContext = MDCContext()
 
         return runBlocking(mdcContext) {
-            requests.map { request -> async(Dispatchers.IO) { semaphore.withPermit { uploadFile(request) } } }.awaitAll()
+            requests.map {
+                    request ->
+                async(Dispatchers.IO) { semaphore.withPermit { uploadFile(request) } }
+            }.awaitAll()
+        }.also {
+            logger.info("AWS S3 Upload Bulk __ Done!")
         }
-            .also { logger.info("AWS S3 Upload Bulk __ Done!") }
     }
 
     fun uploadFile(uploadRequest: S3UploadRequest): S3UploadResult {
@@ -39,25 +45,25 @@ class S3UploadService(private val s3Client: AmazonS3) {
         } catch (ex: AmazonServiceException) {
             logger.error(ex.errorMessage)
             null
+        }.let {
+            S3UploadResult(
+                bucket = uploadRequest.bucket,
+                key = uploadRequest.key,
+                filename = uploadRequest.file.name,
+                isSuccess = it != null,
+            )
+        }.also {
+            logger.debug(
+                """
+                AWS S3 Upload File:
+                    - Bucket: {}
+                    - Key: {}
+                    - Successful: {}
+                """.trimIndent(),
+                uploadRequest.bucket,
+                uploadRequest.key,
+                it.isSuccess,
+            )
         }
-            .let {
-                S3UploadResult(
-                    bucket = uploadRequest.bucket,
-                    key = uploadRequest.key,
-                    filename = uploadRequest.file.name,
-                    isSuccess = it != null,
-                )
-            }
-            .also {
-                logger.debug(
-                    """
-                        AWS S3 Upload File:
-                            - Bucket: {}
-                            - Key: {}
-                            - Successful: {}
-                    """.trimIndent(),
-                    uploadRequest.bucket, uploadRequest.key, it.isSuccess
-                )
-            }
     }
 }

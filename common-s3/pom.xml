@@ -2,60 +2,53 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.4</version>
-        <relativePath/>
+        <groupId>com.kw</groupId>
+        <artifactId>kw-starter-parent</artifactId>
+        <version>1.x-SNAPSHOT</version>
+<!--		<relativePath/>-->
+        <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.kw</groupId>
-    <artifactId>spring-boot--kotlin-common-s3</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
-    <name>spring-boot--kotlin-common-s3</name>
-    <description>Starter S3 Library</description>
+    <artifactId>kw-starter-common-s3</artifactId>
+    <version>1.x-SNAPSHOT</version>
+    <name>kw-starter-common-s3</name>
+    <description>Common library for AWS S3</description>
 
     <properties>
-        <kotlin.version>1.6.0</kotlin.version>
-        <kotlinx-coroutines.version>1.6.0</kotlinx-coroutines.version>
-        <ktlint-maven-plugin.version>1.12.1</ktlint-maven-plugin.version>
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <aws-java-sdk-s3.version>1.12.67</aws-java-sdk-s3.version>
-
-        <starter-common.version>1.2.0-SNAPSHOT</starter-common.version>
+        <starter-common.version>1.x-SNAPSHOT</starter-common.version>
+        <aws-java-sdk-s3.version>1.12.782</aws-java-sdk-s3.version>
     </properties>
 
     <dependencies>
-        <!-- COMMON LIBRARY -->
         <dependency>
             <groupId>com.kw</groupId>
-            <artifactId>starter-common</artifactId>
-            <version>${starter-common.version}</version>
+            <artifactId>kw-starter-common</artifactId>
             <scope>provided</scope>
         </dependency>
-
-        <!-- COROUTINE -->
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-core</artifactId>
-            <version>${kotlinx-coroutines.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.jetbrains.kotlinx</groupId>
-            <artifactId>kotlinx-coroutines-slf4j</artifactId>
-            <version>${kotlinx-coroutines.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- AWS S3 -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>${aws-java-sdk-s3.version}</version>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.kw</groupId>
+                <artifactId>kw-starter-common</artifactId>
+                <version>${starter-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
@@ -105,22 +98,23 @@
         </pluginManagement>
     </build>
 
-<!--    <repositories>-->
-<!--        <repository>-->
-<!--            <id>maven-public</id>-->
-<!--            <url>...</url>-->
-<!--        </repository>-->
-<!--    </repositories>-->
+    <!--
+    <repositories>
+        <repository>
+            <id>maven-public</id>
+            <url>http://nexus.my-org.com/nexus/content/groups/truemoney-group/</url>
+        </repository>
+    </repositories>
 
-<!--    <distributionManagement>-->
-<!--        <snapshotRepository>-->
-<!--            <id>nexus-snapshots</id>-->
-<!--            <url>.../snapshots/</url>-->
-<!--        </snapshotRepository>-->
-<!--        <repository>-->
-<!--            <id>nexus-releases</id>-->
-<!--            <url>.../releases/</url>-->
-<!--        </repository>-->
-<!--    </distributionManagement>-->
-
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <url>http://nexus.my-org.com/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-releases</id>
+            <url>http://nexus.mh-org.com/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
+    -->
 </project>

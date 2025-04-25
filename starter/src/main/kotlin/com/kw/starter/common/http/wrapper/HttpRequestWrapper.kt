@@ -5,7 +5,7 @@ import jakarta.servlet.http.HttpServletRequestWrapper
 import java.util.Collections
 import java.util.Enumeration
 
-class ApplicationHttpRequestWrapper(
+class HttpRequestWrapper(
     request: HttpServletRequest,
 ) : HttpServletRequestWrapper(request) {
     private val customHeaders: MutableMap<String, String> = mutableMapOf()
@@ -27,9 +27,7 @@ class ApplicationHttpRequestWrapper(
     }
 
     override fun getHeaderNames(): Enumeration<String> =
-        Collections.enumeration(
-            super.getHeaderNames().toList() + customHeaders.keys,
-        )
+        Collections.enumeration(super.getHeaderNames().toList() + customHeaders.keys)
 
     override fun getHeaders(name: String?): Enumeration<String> {
         val headerName: String? = name?.lowercase()

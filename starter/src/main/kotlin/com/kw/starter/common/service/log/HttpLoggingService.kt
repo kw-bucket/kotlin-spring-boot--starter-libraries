@@ -23,7 +23,7 @@ class HttpLoggingService {
             httpRequest.parameterNames
                 .toList()
                 .associateWith {
-                    httpRequest.getParameter(it)
+                    httpRequest.getParameterValues(it).joinToString(separator = ",")
                 }.let {
                     prettyPrinter.writeValueAsString(it)
                 } ?: "None"
@@ -32,7 +32,7 @@ class HttpLoggingService {
             httpRequest.headerNames
                 .toList()
                 .associateWith {
-                    httpRequest.getHeader(it)
+                    httpRequest.getHeaders(it).toList().joinToString(separator = ",")
                 }.let {
                     prettyPrinter.writeValueAsString(it)
                 } ?: "None"
@@ -41,13 +41,11 @@ class HttpLoggingService {
 
         logger.info(
             """
-            :: HTTP REQUEST ::
-            Method = [{}]
-            Path = [{}]
-            Parameters = [{}]
-            Request Headers = [{}]
-            Request Body = [{}]
-            """.trimIndent(),
+                |:: HTTP REQUEST :: {} {}
+                |:. Parameters = [{}]
+                |:. Request Headers = [{}]
+                |:. Request Body = [{}]
+            """.trimMargin(),
             httpRequest.method,
             httpRequest.requestURI,
             parameters,
@@ -65,7 +63,7 @@ class HttpLoggingService {
             httpResponse.headerNames
                 .toList()
                 .associateWith {
-                    httpResponse.getHeader(it)
+                    httpResponse.getHeaders(it).toList().joinToString(separator = ",")
                 }.let {
                     prettyPrinter.writeValueAsString(it)
                 } ?: "None"
@@ -74,14 +72,13 @@ class HttpLoggingService {
 
         logger.info(
             """
-            :: HTTP RESPONSE ::
-            Http Status = [{}]
-            Path = [{}]
-            Response Headers = [{}]
-            Response Body = [{}]
-            """.trimIndent(),
+                |:: HTTP RESPONSE :: {} {} [{}]
+                |:. Response Headers = [{}]
+                |:. Response Body = [{}]
+            """.trimMargin(),
             httpRequest.method,
             httpRequest.requestURI,
+            httpResponse.status,
             headers,
             body,
         )

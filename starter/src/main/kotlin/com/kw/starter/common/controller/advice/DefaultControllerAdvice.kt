@@ -3,7 +3,7 @@ package com.kw.starter.common.controller.advice
 import com.fasterxml.jackson.databind.exc.InvalidFormatException
 import com.kw.starter.common.constant.ApiOutputStatus
 import com.kw.starter.common.dto.ApiOutput
-import com.kw.starter.common.exception.ApplicationException
+import com.kw.starter.common.exception.AppException
 import com.kw.starter.common.extension.string.toSnakeCase
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 
 @ControllerAdvice
-class ApplicationControllerAdvice {
+class DefaultControllerAdvice {
     private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 
     @Value("\${starter.application-code:APP}")
@@ -64,8 +64,8 @@ class ApplicationControllerAdvice {
         return buildResponse(HttpStatus.BAD_REQUEST, ExceptionStatus.E4000, description)
     }
 
-    @ExceptionHandler(ApplicationException::class)
-    fun handleAppException(ex: ApplicationException): ResponseEntity<ApiOutput<Nothing>> =
+    @ExceptionHandler(AppException::class)
+    fun handleAppException(ex: AppException): ResponseEntity<ApiOutput<Nothing>> =
         buildResponse(ex.httpStatus, ex.apiOutputStatus, ex.description)
 
     private fun buildResponse(

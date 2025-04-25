@@ -1,7 +1,7 @@
 package com.kw.starter.common.http.filter
 
 import com.kw.starter.common.http.constant.HeaderFields
-import com.kw.starter.common.http.wrapper.ApplicationHttpRequestWrapper
+import com.kw.starter.common.http.wrapper.HttpRequestWrapper
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -15,20 +15,29 @@ class HttpRequestFilter : OncePerRequestFilter() {
     @Value("\${starter.application-code:APP}")
     private val applicationCode: String = "APP"
 
-    private val exclusionPaths = listOf("/health", "/info", "/metrics")
+    @Value("\${server.servlet.context-path:CONTEXT-PATH}")
+    private val contextPath: String = "context-path"
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain,
     ) {
-        val isExclusionPath = exclusionPaths.any { request.requestURI.endsWith(it) }
+        val isExclusionPath =
+            listOf(
+                "$contextPath/health",
+                "$contextPath/info",
+                "$contextPath/metrics",
+            ).any {
+                request.requestURI.endsWith(it)
+            }
+
         if (isExclusionPath) {
             filterChain.doFilter(request, response)
             return
         }
 
-        val requestHeaderWrapper = ApplicationHttpRequestWrapper(request)
+        val requestHeaderWrapper = HttpRequestWrapper(request)
 
         val xCorrelationId = HeaderFields.X_CORRELATION_ID
 

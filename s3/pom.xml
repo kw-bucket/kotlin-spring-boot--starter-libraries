@@ -13,25 +13,25 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>kw-starter-common-sftp</artifactId>
+    <artifactId>kw-starter-s3</artifactId>
     <version>1.x-SNAPSHOT</version>
-    <name>kw-starter-common-sftp</name>
-    <description>Common library for SFTP</description>
+    <name>kw-starter-s3</name>
+    <description>AWS S3 library for starter</description>
 
     <properties>
         <starter-common.version>1.x-SNAPSHOT</starter-common.version>
-        <jsch.version>0.1.55</jsch.version>
+        <aws-java-sdk-s3.version>1.12.782</aws-java-sdk-s3.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.kw</groupId>
-            <artifactId>kw-starter-common</artifactId>
+            <artifactId>kw-starter</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.jcraft</groupId>
-            <artifactId>jsch</artifactId>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
         </dependency>
     </dependencies>
 
@@ -39,13 +39,13 @@
         <dependencies>
             <dependency>
                 <groupId>com.kw</groupId>
-                <artifactId>kw-starter-common</artifactId>
+                <artifactId>kw-starter</artifactId>
                 <version>${starter-common.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.jcraft</groupId>
-                <artifactId>jsch</artifactId>
-                <version>${jsch.version}</version>
+                <groupId>com.amazonaws</groupId>
+                <artifactId>aws-java-sdk-s3</artifactId>
+                <version>${aws-java-sdk-s3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

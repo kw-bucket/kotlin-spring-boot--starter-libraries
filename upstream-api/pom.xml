@@ -13,25 +13,20 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>kw-starter-common-s3</artifactId>
+    <artifactId>kw-starter-upstream-api</artifactId>
     <version>1.x-SNAPSHOT</version>
-    <name>kw-starter-common-s3</name>
-    <description>Common library for AWS S3</description>
+    <name>kw-starter-upstream-api</name>
+    <description>Provide upstream api</description>
 
     <properties>
         <starter-common.version>1.x-SNAPSHOT</starter-common.version>
-        <aws-java-sdk-s3.version>1.12.782</aws-java-sdk-s3.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.kw</groupId>
-            <artifactId>kw-starter-common</artifactId>
+            <artifactId>kw-starter</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
         </dependency>
     </dependencies>
 
@@ -39,13 +34,8 @@
         <dependencies>
             <dependency>
                 <groupId>com.kw</groupId>
-                <artifactId>kw-starter-common</artifactId>
+                <artifactId>kw-starter</artifactId>
                 <version>${starter-common.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.amazonaws</groupId>
-                <artifactId>aws-java-sdk-s3</artifactId>
-                <version>${aws-java-sdk-s3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -13,20 +13,25 @@
         <relativePath>../parent/pom.xml</relativePath>
     </parent>
 
-    <artifactId>kw-starter-common-mail</artifactId>
+    <artifactId>kw-starter-sftp</artifactId>
     <version>1.x-SNAPSHOT</version>
-    <name>kw-starter-common-mail</name>
-    <description>Common library for mailing api</description>
+    <name>kw-starter-sftp</name>
+    <description>SFTP library for starter</description>
 
     <properties>
         <starter-common.version>1.x-SNAPSHOT</starter-common.version>
+        <jsch.version>0.1.55</jsch.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.kw</groupId>
-            <artifactId>kw-starter-common</artifactId>
+            <artifactId>kw-starter</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
         </dependency>
     </dependencies>
 
@@ -34,8 +39,13 @@
         <dependencies>
             <dependency>
                 <groupId>com.kw</groupId>
-                <artifactId>kw-starter-common</artifactId>
+                <artifactId>kw-starter</artifactId>
                 <version>${starter-common.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>${jsch.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

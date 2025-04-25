@@ -13,10 +13,10 @@
 		<relativePath>../parent/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>kw-starter-common</artifactId>
+	<artifactId>kw-starter</artifactId>
 	<version>1.x-SNAPSHOT</version>
-	<name>kw-starter-common</name>
-	<description>Common library for kotlin(+Java) spring boot</description>
+	<name>kw-starter</name>
+	<description>Starter library for kotlin(+Java) spring boot</description>
 
 	<build>
 		<sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>

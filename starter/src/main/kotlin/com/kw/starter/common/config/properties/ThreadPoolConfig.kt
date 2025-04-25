@@ -1,9 +1,11 @@
-package com.kw.starter.common.configuration.application
+package com.kw.starter.common.config.properties
 
-data class ThreadPoolConfig(
+data class ThreadPoolProperty(
     val threadNamePrefix: String = "Thd-",
-    val keepAliveTimeSec: Int = 0,
+    val keepAliveTimeSeconds: Int = 60,
     val capacity: Int = Int.MAX_VALUE,
+    val waitTaskOnShutdown: Boolean = true,
+    val awaitTerminationSeconds: Int = 60,
     val pooling: Pooling = Pooling(),
 ) {
     data class Pooling(

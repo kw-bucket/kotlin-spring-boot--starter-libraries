@@ -8,13 +8,32 @@
 #    encoding: '@project.build.sourceEncoding@'
 #    java:
 #      version: '@java.version@'
-#
+
 #starter:
 #  application-code: 'APP'
 #
 #  http-client:
-#    connection-request-timeout-sec: 30
-#    response-timeout-sec: 30
+#    connection:
+#      connect-timeout-seconds: 31
+#    request:
+#      connection-request-timeout-seconds: 30
+#      response-timeout-seconds: 32
 #    pooling:
-#      connection-limit: 100
-#      max-connection-per-route: 50
+#      connection-limit: 1000
+#      max-connection-per-route: 1000
+
+#  api:
+#    logging:
+#      enabled: true
+#      body-length: 75
+
+#thread:
+#  example-1:
+#    thread-name-prefix: Thd-Prefix-
+#    keep-alive-time-seconds: 90
+#    capacity: 100000
+#    wait-task-on-shutdown: true
+#    await-termination-seconds: 90
+#    pooling:
+#      core: 10000
+#      max: 20000

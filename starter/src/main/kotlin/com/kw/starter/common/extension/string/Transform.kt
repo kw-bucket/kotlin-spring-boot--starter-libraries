@@ -52,12 +52,20 @@ inline fun <reified T : Any> String.asApiResponseSuccess(): ApiResponse.Success<
 inline fun <reified T : Any> String.asApiResponseFailure(
     httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR,
 ): ApiResponse.Failure<T> =
-    this.parseOrNull<T>().let {
-        ApiResponse.Failure(httpStatus = httpStatus, httpHeaders = null, body = it)
-    }
+    this.parseOrNull<T>().let { ApiResponse.Failure(httpStatus = httpStatus, httpHeaders = null, body = it) }
 
 /**
  * Parse json string into a nullable object as bodyAsString of ApiResponse.Error
  */
 fun String.asApiResponseError(httpStatus: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR): ApiResponse.Error =
     ApiResponse.Error(httpStatus = httpStatus, httpHeaders = null, bodyAsString = this)
+
+fun String.collapse(length: Int = 100): String =
+    if (this.length > length) {
+        val center = " ######## "
+        val n = (length - center.length) / 2
+
+        "${this.take(n)}$center${this.takeLast(n)}"
+    } else {
+        this
+    }

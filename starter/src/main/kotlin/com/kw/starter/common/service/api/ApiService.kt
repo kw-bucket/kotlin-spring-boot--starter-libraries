@@ -106,7 +106,7 @@ open class ApiService(
                             when (val cause: Throwable? = ex.cause) {
                                 is ConnectionRequestTimeoutException,
                                 is ConnectTimeoutException,
-                                    -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, cause)
+                                -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, cause)
                                 is SocketTimeoutException -> Pair(HttpStatus.GATEWAY_TIMEOUT, cause)
                                 else -> Pair(HttpStatus.INTERNAL_SERVER_ERROR, ex)
                             }
